@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mermaid Diagram Macro — Docs</title>
-  <meta name="description" content="Render flowcharts, sequence diagrams, and Gantt charts from Mermaid syntax in Confluence.">
-  <link rel="canonical" href="https://docs.vectored.dev/macrotoolkit/docs/mermaid.html">
-  <meta property="og:title" content="Mermaid Diagram Macro — Docs">
-  <meta property="og:description" content="Render flowcharts, sequence diagrams, and Gantt charts from Mermaid syntax in Confluence.">
-  <meta property="og:url" content="https://docs.vectored.dev/macrotoolkit/docs/mermaid.html">
+  <title>3D Viewer Macro — Docs</title>
+  <meta name="description" content="Display interactive 3D models (STL, OBJ, GLB, 3MF) with orbit controls in Confluence. Pro edition.">
+  <link rel="canonical" href="https://docs.vectored.dev/macrotoolkit/docs/3d-viewer.html">
+  <meta property="og:title" content="3D Viewer Macro — Docs">
+  <meta property="og:description" content="Display interactive 3D models (STL, OBJ, GLB, 3MF) with orbit controls in Confluence. Pro edition.">
+  <meta property="og:url" content="https://docs.vectored.dev/macrotoolkit/docs/3d-viewer.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Vectored">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Mermaid Diagram Macro — Docs">
-  <meta name="twitter:description" content="Render flowcharts, sequence diagrams, and Gantt charts from Mermaid syntax in Confluence.">
+  <meta name="twitter:title" content="3D Viewer Macro — Docs">
+  <meta name="twitter:description" content="Display interactive 3D models (STL, OBJ, GLB, 3MF) with orbit controls in Confluence. Pro edition.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>tailwind.config={theme:{extend:{colors:{primary:'#1E293B',secondary:'#334155',cta:'#22C55E',bg:'#0F172A',surface:'#1E293B',text:'#F8FAFC',muted:'#94A3B8',border:'#334155'},fontFamily:{sans:['IBM Plex Sans','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
@@ -69,7 +69,6 @@
       <a href="https://marketplace.atlassian.com/apps/3972300183" target="_blank" rel="noopener" class="px-3 py-2 rounded-lg bg-cta text-bg font-semibold text-center cursor-pointer">Try now for free</a>
     </div>
   </div>
-
   <!-- Sidebar + Content wrapper -->
   <div class="pt-24 flex">
     <!-- Sidebar -->
@@ -97,241 +96,69 @@
     <!-- Content -->
     <main class="lg:ml-64 flex-1 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
     <a href="./index.html" class="text-sm text-muted hover:text-cta transition-colors duration-200 cursor-pointer">&larr; All Macros</a>
+    <div class="flex items-center gap-3 mt-4 mb-2">
+      <h1 class="text-3xl sm:text-4xl font-bold"><img src="icons/3d-viewer.svg" class="w-10 h-10 inline-block mr-3 align-middle" alt="">3D Viewer</h1>
+      <span class="bg-cta/10 border border-cta/30 text-cta text-xs font-mono px-2 py-0.5 rounded">PRO ONLY</span>
+    </div>
+    <p class="text-muted mb-8">Display interactive 3D models directly on your Confluence page. Supports STL, OBJ, GLB, and 3MF formats with full orbit controls, zoom, and pan.</p>
 
-    <h1 class="text-3xl sm:text-4xl font-bold mt-4 mb-2"><img src="icons/mermaid.svg" class="w-10 h-10 inline-block mr-3 align-middle" alt="">Mermaid Diagram</h1>
-    <p class="text-muted mb-8">Render Mermaid diagrams — flowcharts, sequence diagrams, Gantt charts, and more — from text syntax directly on your Confluence page.</p>
+    <div class="bg-surface border border-border rounded-xl h-64 flex items-center justify-center mb-10"><p class="text-muted text-sm">Screenshot placeholder</p></div>
 
-    <!-- Screenshot placeholder -->
     <section class="mb-10">
       <h2 class="text-xl font-semibold mb-4">How to Use</h2>
       <ol class="list-decimal list-inside space-y-3 text-muted">
-        <li>Type <code class="font-mono bg-surface px-2 py-0.5 rounded text-cta">/Mermaid</code> in the Confluence editor</li>
-        <li>A fullscreen editor opens with a code panel (left) and live preview (right)</li>
-        <li>Write your Mermaid syntax (e.g., <code class="font-mono bg-surface px-2 py-0.5 rounded">graph TD; A-->B; B-->C;</code>)</li>
-        <li>See the diagram update in real-time as you type</li>
-        <li>Click <strong class="text-text">Save</strong> — the diagram renders on the published page</li>
+        <li>Type <code class="font-mono bg-surface px-2 py-0.5 rounded text-cta">/3D Viewer</code> in the editor</li>
+        <li>Upload a 3D model file (STL, OBJ, GLB, or 3MF)</li>
+        <li>Configure display options (background color, lighting, rotation)</li>
+        <li>Click <strong class="text-text">Save</strong> — the interactive 3D model renders on the page</li>
+        <li>Viewers can orbit, zoom, and pan the model interactively</li>
       </ol>
     </section>
 
     <section class="mb-10">
-      <details class="bg-surface border border-border rounded-xl overflow-hidden group">
-        <summary class="px-4 py-3 cursor-pointer flex items-center justify-between text-sm font-semibold hover:bg-bg transition-colors duration-200">
-          Sample Script
-          <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <div class="px-4 pb-4">
-          <div class="flex justify-end mb-2">
-            <a href="https://raw.githubusercontent.com/openAPI-Studio/macro-toolkit-docs/main/assets/raw/mermaid-sample.mmd" download class="text-xs text-cta hover:underline cursor-pointer flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Download .mmd
-            </a>
-          </div>
-          <pre class="bg-bg rounded-lg p-3 text-sm font-mono text-muted overflow-x-auto"><code>flowchart TD
-    A[Start] --> B{Login Successful?}
-    B -->|No| C[Show Error Message]
-    C --> A
-    B -->|Yes| D[Load Dashboard]
-    D --> E{Choose Action}
-    E -->|View Reports| F[Reports Module]
-    E -->|Manage Tasks| G[Tasks Module]
-    E -->|Settings| H[Settings Module]
-    F --> I[Generate Report]
-    G --> J[Create Task]
-    H --> K[Update Preferences]
-    I --> L[Save/Export]
-    J --> L
-    K --> L
-    L --> M[Logout]
-    M --> A</code></pre>
-        </div>
-      </details>
+      <h2 class="text-xl font-semibold mb-4">Supported Formats</h2>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="bg-surface border border-border rounded-lg p-4"><h4 class="font-semibold text-sm mb-1">.STL</h4><p class="text-xs text-muted">Standard tessellation — 3D printing, CAD exports</p></div>
+        <div class="bg-surface border border-border rounded-lg p-4"><h4 class="font-semibold text-sm mb-1">.OBJ</h4><p class="text-xs text-muted">Wavefront — widely supported, with materials</p></div>
+        <div class="bg-surface border border-border rounded-lg p-4"><h4 class="font-semibold text-sm mb-1">.GLB</h4><p class="text-xs text-muted">Binary glTF — compact, web-optimized, with textures</p></div>
+        <div class="bg-surface border border-border rounded-lg p-4"><h4 class="font-semibold text-sm mb-1">.3MF</h4><p class="text-xs text-muted">3D Manufacturing Format — modern 3D printing standard</p></div>
+      </div>
     </section>
 
-    <div class="space-y-6 mb-10">
-      <div>
-        <p class="text-sm text-muted mb-2">Editor — live preview as you type</p>
-        <img src="../assets/mermaid/mermaid_editscreen.png" alt="Mermaid Diagram editor with code and live preview" class="w-full rounded-xl border border-border">
-      </div>
-      <div>
-        <p class="text-sm text-muted mb-2">Published page</p>
-        <img src="../assets/mermaid/mermaid_publish.png" alt="Mermaid Diagram rendered on Confluence page" class="w-full rounded-xl border border-border">
-      </div>
-    </div>
-
     <section class="mb-10">
-      <h2 class="text-xl font-semibold mb-4">Supported Diagram Types</h2>
+      <h2 class="text-xl font-semibold mb-4">Features</h2>
       <ul class="grid sm:grid-cols-2 gap-2 text-sm text-muted">
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Flowcharts</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Sequence Diagrams</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Gantt Charts</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Class Diagrams</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>State Diagrams</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Pie Charts</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>ER Diagrams</li>
-        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Git Graphs</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Interactive orbit controls</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Zoom &amp; pan</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Auto-rotate option</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Configurable lighting</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Custom background color</li>
+        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>No external service — fully offline</li>
       </ul>
-    </section>
-
-    <!-- Pro Features -->
-    <section class="mb-10">
-      <h2 class="text-xl font-semibold mb-4">Pro Features <span class="text-xs bg-cta/10 border border-cta/30 text-cta font-mono px-1.5 py-0.5 rounded ml-2">PRO</span></h2>
-      <p class="text-muted text-sm mb-4">The following features are available exclusively in the <strong class="text-text">Pro version</strong>:</p>
-      <div class="space-y-4">
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Export as SVG / PNG</h3>
-          <p class="text-muted text-sm">Download your diagrams as high-resolution SVG or 2× PNG files. Available both in the editor toolbar and on the published page (hover to reveal export buttons).</p>
-        </div>
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Zoom Controls</h3>
-          <p class="text-muted text-sm">Interactive zoom on the published diagram — use the +/− buttons or <code class="font-mono bg-bg px-1.5 py-0.5 rounded text-xs">Ctrl/⌘ + Scroll</code> to zoom in/out. Set a default zoom level (50%–200%) in the editor that persists on the page.</p>
-        </div>
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Code Split View &amp; Copy</h3>
-          <p class="text-muted text-sm">On the published page, click the <code class="font-mono bg-bg px-1.5 py-0.5 rounded text-xs">&lt;/&gt; Code</code> button to open a split panel showing the raw Mermaid source with a one-click copy button.</p>
-        </div>
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Diagram Templates</h3>
-          <p class="text-muted text-sm">8 built-in templates (Flowchart, Sequence, Class, State, Gantt, Pie, ER, Git Graph) — insert with one click from the editor toolbar.</p>
-        </div>
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Configurable Container Height</h3>
-          <p class="text-muted text-sm">Set the minimum container height (Auto, 100px–600px) to control how the diagram fits on the page. Default is <strong class="text-text">Auto</strong> (fits content exactly).</p>
-        </div>
-        <div class="bg-surface border border-border rounded-xl p-4">
-          <h3 class="font-semibold text-sm mb-2">Dark Mode Support</h3>
-          <p class="text-muted text-sm">Diagrams automatically adapt to Confluence's light/dark theme — text, lines, and backgrounds adjust for readability in both modes.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-10">
-      <details class="bg-surface border border-border rounded-xl overflow-hidden group">
-        <summary class="px-4 py-3 cursor-pointer flex items-center justify-between text-sm font-semibold hover:bg-bg transition-colors duration-200">
-          Using via MCP (Model Context Protocol)
-          <svg class="w-4 h-4 text-muted group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <div class="px-4 pb-4 pt-2 space-y-6">
-          <div class="flex justify-end">
-            <a href="https://raw.githubusercontent.com/openAPI-Studio/macro-toolkit-docs/main/assets/raw/mermaid-mcp-guide.md" download class="text-xs text-cta hover:underline cursor-pointer flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Download .md
-            </a>
-          </div>
-          <p class="text-sm text-muted">Programmatically insert or update Mermaid diagrams via MCP using the Confluence storage format.</p>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">Macro Config Schema</h4>
-            <div class="overflow-x-auto">
-              <table class="w-full text-xs"><thead class="text-xs text-muted uppercase border-b border-border"><tr><th class="px-3 py-2 text-left">Field</th><th class="px-3 py-2 text-left">Type</th><th class="px-3 py-2 text-left">Description</th><th class="px-3 py-2 text-left">Default</th></tr></thead><tbody class="divide-y divide-border">
-                <tr><td class="px-3 py-2 font-mono text-cta">code</td><td class="px-3 py-2">string</td><td class="px-3 py-2 text-muted">The Mermaid syntax source code</td><td class="px-3 py-2 text-muted">''</td></tr>
-                <tr><td class="px-3 py-2 font-mono text-cta">minHeight</td><td class="px-3 py-2">string</td><td class="px-3 py-2 text-muted">'auto' or pixel value like '300'</td><td class="px-3 py-2 text-muted">'auto'</td></tr>
-                <tr><td class="px-3 py-2 font-mono text-cta">defaultZoom</td><td class="px-3 py-2">string</td><td class="px-3 py-2 text-muted">Zoom percentage: '50' to '200'</td><td class="px-3 py-2 text-muted">'100'</td></tr>
-              </tbody></table>
-            </div>
-          </div>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">Storage Format (XHTML)</h4>
-            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>&lt;ac:structured-macro ac:name="mermaid-diagram" ac:schema-version="1" ac:macro-id="unique-id"&gt;
-  &lt;ac:parameter ac:name="code"&gt;graph TD
-  A[Start] --&amp;gt; B{Decision}
-  B --&amp;gt;|Yes| C[Done]
-  B --&amp;gt;|No| D[Retry]&lt;/ac:parameter&gt;
-  &lt;ac:parameter ac:name="minHeight"&gt;auto&lt;/ac:parameter&gt;
-  &lt;ac:parameter ac:name="defaultZoom"&gt;100&lt;/ac:parameter&gt;
-&lt;/ac:structured-macro&gt;</code></pre>
-            <p class="text-xs text-muted mt-2"><strong class="text-text">Important:</strong> HTML-encode special characters (<code class="font-mono">&gt;</code> → <code class="font-mono">&amp;gt;</code>, <code class="font-mono">&lt;</code> → <code class="font-mono">&amp;lt;</code>, <code class="font-mono">&amp;</code> → <code class="font-mono">&amp;amp;</code>).</p>
-          </div>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">MCP Tool Definition</h4>
-            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>{
-  "name": "insert_mermaid_diagram",
-  "description": "Insert a Mermaid diagram into a Confluence page",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "pageId": { "type": "string", "description": "The Confluence page ID" },
-      "code": { "type": "string", "description": "Mermaid diagram syntax" },
-      "minHeight": { "type": "string", "default": "auto" },
-      "defaultZoom": { "type": "string", "default": "100" }
-    },
-    "required": ["pageId", "code"]
-  }
-}</code></pre>
-          </div>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">Implementation Pattern</h4>
-            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>async function insertMermaidDiagram({ pageId, code, minHeight = 'auto', defaultZoom = '100' }) {
-  const page = await confluenceApi.get(`/wiki/api/v2/pages/${pageId}?body-format=storage`);
-
-  const encodedCode = code
-    .replace(/&amp;/g, '&amp;amp;')
-    .replace(/&lt;/g, '&amp;lt;')
-    .replace(/&gt;/g, '&amp;gt;');
-
-  const macroMarkup = `
-&lt;ac:structured-macro ac:name="mermaid-diagram" ac:schema-version="1"&gt;
-  &lt;ac:parameter ac:name="code"&gt;${encodedCode}&lt;/ac:parameter&gt;
-  &lt;ac:parameter ac:name="minHeight"&gt;${minHeight}&lt;/ac:parameter&gt;
-  &lt;ac:parameter ac:name="defaultZoom"&gt;${defaultZoom}&lt;/ac:parameter&gt;
-&lt;/ac:structured-macro&gt;`;
-
-  const newBody = page.body.storage.value + macroMarkup;
-  await confluenceApi.put(`/wiki/api/v2/pages/${pageId}`, {
-    version: { number: page.version.number + 1 },
-    body: { storage: { value: newBody, representation: 'storage' } }
-  });
-}</code></pre>
-          </div>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">Supported Diagram Types</h4>
-            <ul class="grid sm:grid-cols-2 gap-1 text-xs text-muted">
-              <li><code class="font-mono text-cta">graph TD/LR</code> Flowcharts</li>
-              <li><code class="font-mono text-cta">sequenceDiagram</code> Sequence</li>
-              <li><code class="font-mono text-cta">classDiagram</code> Class</li>
-              <li><code class="font-mono text-cta">stateDiagram-v2</code> State</li>
-              <li><code class="font-mono text-cta">erDiagram</code> ER</li>
-              <li><code class="font-mono text-cta">gantt</code> Gantt</li>
-              <li><code class="font-mono text-cta">pie</code> Pie</li>
-              <li><code class="font-mono text-cta">gitGraph</code> Git</li>
-              <li><code class="font-mono text-cta">mindmap</code> Mind maps</li>
-              <li><code class="font-mono text-cta">timeline</code> Timelines</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="text-sm font-semibold mb-2">Tips</h4>
-            <ol class="list-decimal list-inside space-y-1 text-xs text-muted">
-              <li><strong class="text-text">Validate</strong> — Call <code class="font-mono">mermaid.parse(code)</code> before saving</li>
-              <li><strong class="text-text">Escape</strong> — Encode <code class="font-mono">&lt; &gt; &amp; "</code> in the code field</li>
-              <li><strong class="text-text">Newlines</strong> — Use actual newlines, not <code class="font-mono">\n</code> literals</li>
-              <li><strong class="text-text">Update</strong> — Find <code class="font-mono">ac:name="mermaid-diagram"</code> block and replace code param</li>
-              <li><strong class="text-text">Prerequisite</strong> — Forge app must be installed on the site</li>
-            </ol>
-          </div>
-        </div>
-      </details>
     </section>
 
     <section class="mb-10">
       <h2 class="text-xl font-semibold mb-4">Technical Details</h2>
       <div class="bg-surface border border-border rounded-xl overflow-hidden">
-        <table class="w-full text-sm">
-          <tbody class="divide-y divide-border">
-            <tr><td class="px-4 py-3 text-muted">Storage</td><td class="px-4 py-3">Macro config (inline with page)</td></tr>
-            <tr><td class="px-4 py-3 text-muted">External Service</td><td class="px-4 py-3">None — renders client-side</td></tr>
-            <tr><td class="px-4 py-3 text-muted">Editor</td><td class="px-4 py-3">Fullscreen split-pane with line numbers, Tab support, debounced preview</td></tr>
-            <tr><td class="px-4 py-3 text-muted">Export</td><td class="px-4 py-3">SVG &amp; PNG (2× resolution) <span class="text-[10px] bg-cta/10 border border-cta/30 text-cta font-mono px-1 rounded ml-1">PRO</span></td></tr>
-            <tr><td class="px-4 py-3 text-muted">Zoom</td><td class="px-4 py-3">Interactive (+/−/Fit, Ctrl+Scroll) with configurable default <span class="text-[10px] bg-cta/10 border border-cta/30 text-cta font-mono px-1 rounded ml-1">PRO</span></td></tr>
-            <tr><td class="px-4 py-3 text-muted">Code View</td><td class="px-4 py-3">Split panel with copy button on published page <span class="text-[10px] bg-cta/10 border border-cta/30 text-cta font-mono px-1 rounded ml-1">PRO</span></td></tr>
-            <tr><td class="px-4 py-3 text-muted">Templates</td><td class="px-4 py-3">8 built-in (Flowchart, Sequence, Class, State, Gantt, Pie, ER, Git) <span class="text-[10px] bg-cta/10 border border-cta/30 text-cta font-mono px-1 rounded ml-1">PRO</span></td></tr>
-            <tr><td class="px-4 py-3 text-muted">Theme</td><td class="px-4 py-3">Auto light/dark mode adaptation <span class="text-[10px] bg-cta/10 border border-cta/30 text-cta font-mono px-1 rounded ml-1">PRO</span></td></tr>
-            <tr><td class="px-4 py-3 text-muted">Availability</td><td class="px-4 py-3">Basic editor in Lite; full features in Pro</td></tr>
-          </tbody>
-        </table>
+        <table class="w-full text-sm"><tbody class="divide-y divide-border">
+          <tr><td class="px-4 py-3 text-muted">Storage</td><td class="px-4 py-3">Forge Storage (chunked base64 for large files)</td></tr>
+          <tr><td class="px-4 py-3 text-muted">External Service</td><td class="px-4 py-3">None — Three.js renders client-side</td></tr>
+          <tr><td class="px-4 py-3 text-muted">Max File Size</td><td class="px-4 py-3">~4.5MB (Forge Storage limit)</td></tr>
+          <tr><td class="px-4 py-3 text-muted">Editor</td><td class="px-4 py-3">Fullscreen config with 3D preview</td></tr>
+          <tr><td class="px-4 py-3 text-muted">Renderer</td><td class="px-4 py-3">Three.js (WebGL)</td></tr>
+          <tr><td class="px-4 py-3 text-muted">Availability</td><td class="px-4 py-3 font-semibold text-cta">Pro only</td></tr>
+        </tbody></table>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-semibold mb-4">Limitations</h2>
+      <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-sm text-muted">
+        <ul class="space-y-2">
+          <li>File size limited to ~4.5MB due to Forge Storage constraints (6MB Lambda payload minus base64 overhead)</li>
+          <li>Very complex models with high polygon counts may impact page performance</li>
+          <li>Textures must be embedded in GLB format — external texture references not supported</li>
+        </ul>
       </div>
     </section>
     </main>
