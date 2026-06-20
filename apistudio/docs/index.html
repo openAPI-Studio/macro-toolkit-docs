@@ -43,7 +43,7 @@
 <!-- Mobile sidebar overlay -->
 <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50 hidden md:hidden" onclick="closeMobile()"></div>
 <aside id="mobile-sidebar" class="fixed top-0 left-0 bottom-0 w-72 z-50 bg-white dark:bg-surface transform -translate-x-full transition-transform md:hidden overflow-y-auto p-6 pt-20">
-    <div id="mobile-nav"></div>
+    <input type="text" placeholder="Search docs..." oninput="searchDocs(this.value)" class="w-full px-3 py-2 mb-4 text-sm rounded-lg bg-gray-100 dark:bg-bg border border-gray-200 dark:border-border text-gray-900 dark:text-text placeholder-gray-400 dark:placeholder-muted focus:outline-none focus:border-cta/50"><div id="mobile-nav"></div><hr class="border-gray-200 dark:border-border my-4"><a href="../support.html" class="block px-3 py-2 text-sm text-gray-600 dark:text-muted hover:text-cta rounded-lg hover:bg-gray-100 dark:hover:bg-secondary/50">Support</a>
 </aside>
 
 <!-- Layout -->
@@ -332,7 +332,7 @@
 <script>
 // Sidebar data
 const sections=[
-{title:'GETTING STARTED',links:[['<img src="../assets/icon.svg" class="w-4 h-4 inline-block mr-1 align-middle">Overview','index.html'],['Installation','installation.html'],['Quick Start','quick-start.html'],['UI Overview','ui-overview.html']]},
+{title:'GETTING STARTED',links:[['Installation','installation.html'],['Quick Start','quick-start.html'],['UI Overview','ui-overview.html']]},
 {title:'HTTP CLIENT',links:[['Sending Requests','sending-requests.html'],['Request Body','request-body.html'],['Parameters & Headers','params-headers.html'],['Response Viewer','response-viewer.html'],['Request History','request-history.html'],['Tabs & Sessions','tabs-sessions.html']]},
 {title:'PROTOCOLS',links:[['GraphQL','graphql.html'],['WebSocket','websocket.html'],['gRPC','grpc.html'],['Server-Sent Events','sse.html']]},
 {title:'COLLECTIONS',links:[['Creating Collections','creating-collections.html'],['Folders & Organization','folders-organization.html'],['Collection Editor','collection-editor.html'],['Collection Runs','collection-runs.html'],['Import & Export','import-export.html'],['Collection JSON Schema','collection-schema.html']]},
@@ -349,34 +349,13 @@ const sections=[
 
 const currentPage=document.documentElement.getAttribute('data-page');
 
-function buildNav(container){
-    let html='';
-    sections.forEach((s,i)=>{
-        const id='cat-'+i;
-        html+=`<div class="mb-3"><button onclick="toggleCat('${id}')" class="flex items-center gap-1 w-full text-left px-2 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-muted hover:text-gray-600 dark:hover:text-text"><svg class="w-3 h-3 transition-transform" id="${id}-arrow" viewBox="0 0 12 12"><path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>${s.title}</button><div id="${id}" class="ml-2 space-y-0.5">`;
-        s.links.forEach(([name,href])=>{
-            const page=href.replace('.html','');
-            const active=page===currentPage;
-            html+=`<a href="${href}" class="sidebar-link block px-3 py-1.5 rounded-md text-sm ${active?'active font-medium':'text-gray-600 dark:text-muted hover:text-gray-900 dark:hover:text-text hover:bg-gray-100 dark:hover:bg-secondary/50'}">${name}</a>`;
-        });
-        html+=`</div></div>`;
-    });
-    container.innerHTML=html;
-    // Rotate all arrows (expanded by default)
-    document.querySelectorAll('[id$="-arrow"]').forEach(a=>a.style.transform='rotate(90deg)');
-}
-
-function toggleCat(id){
-    const el=document.getElementById(id);
-    const arrow=document.getElementById(id+'-arrow');
-    if(el.style.display==='none'){el.style.display='';arrow.style.transform='rotate(90deg)';}
-    else{el.style.display='none';arrow.style.transform='';}
-}
+function buildNav(container,pfx){let html='<a href="index.html" class="sidebar-link block px-3 py-2 mb-3 rounded-md text-sm font-medium '+(currentPage==='index'?'active':'text-gray-600 dark:text-muted hover:text-gray-900 dark:hover:text-text hover:bg-gray-100 dark:hover:bg-secondary/50')+'" data-page="index"><img src="../assets/icon.svg" class="w-4 h-4 inline-block mr-1.5 align-middle">Overview</a>';sections.forEach((s,i)=>{const id=pfx+'-cat-'+i;html+=`<div class="mb-3"><button onclick="toggleCat('${id}')" class="flex items-center gap-1 w-full text-left px-2 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-muted hover:text-gray-600 dark:hover:text-text"><svg class="w-3 h-3 transition-transform" id="${id}-arrow" viewBox="0 0 12 12"><path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>${s.title}</button><div id="${id}" class="ml-2 space-y-0.5">`;s.links.forEach(([name,href])=>{const page=href.replace('.html','');const active=page===currentPage;html+=`<a href="${href}" class="sidebar-link block px-3 py-1.5 rounded-md text-sm ${active?'active font-medium':'text-gray-600 dark:text-muted hover:text-gray-900 dark:hover:text-text hover:bg-gray-100 dark:hover:bg-secondary/50'}">${name}</a>`;});html+=`</div></div>`;});container.innerHTML=html;var open=JSON.parse(localStorage.getItem('sidebar-open')||'[]');sections.forEach((s,i)=>{const hasActive=s.links.some(([_,h])=>h.replace('.html','')===currentPage);const id=pfx+'-cat-'+i;const shouldOpen=hasActive||open.includes(i);if(!shouldOpen){document.getElementById(id).style.display='none';}else{const a=document.getElementById(id+'-arrow');if(a)a.style.transform='rotate(90deg)';}});}
+function toggleCat(id){const el=document.getElementById(id);const arrow=document.getElementById(id+'-arrow');const idx=parseInt(id.split('-cat-')[1]);var open=JSON.parse(localStorage.getItem('sidebar-open')||'[]');if(el.style.display==='none'){el.style.display='';arrow.style.transform='rotate(90deg)';if(!open.includes(idx))open.push(idx);}else{el.style.display='none';arrow.style.transform='';open=open.filter(x=>x!==idx);}localStorage.setItem('sidebar-open',JSON.stringify(open));}
 
 // Build sidebars
-buildNav(document.getElementById('sidebar-nav'));
+buildNav(document.getElementById('sidebar-nav'),'d');
 const mobileNav=document.getElementById('mobile-nav');
-buildNav(mobileNav);
+buildNav(mobileNav,'m');
 
 // Theme
 function applyTheme(dark){document.documentElement.classList.toggle('dark',dark);}
@@ -388,7 +367,7 @@ document.getElementById('theme-toggle').onclick=()=>{
 };
 
 // Mobile menu
-function searchDocs(q){var nav=document.getElementById("sidebar-nav");if(!nav)return;var links=nav.querySelectorAll(".sidebar-link");var divs=nav.querySelectorAll(":scope>div");if(!q){divs.forEach(function(d){d.style.display=""});buildNav(nav,"d");return}q=q.toLowerCase();divs.forEach(function(d){d.style.display="";var c=d.querySelector("[id^=d-cat-]");if(c)c.style.display="";var a=d.querySelector("[id$=-arrow]");if(a)a.style.transform="rotate(90deg)"});links.forEach(function(l){l.style.display=l.textContent.toLowerCase().includes(q)?"":"none"})}
+function searchDocs(q){["sidebar-nav","mobile-nav"].forEach(function(nid){var nav=document.getElementById(nid);if(!nav)return;var links=nav.querySelectorAll(".sidebar-link");var divs=nav.querySelectorAll(":scope>div");if(!q){divs.forEach(function(d){d.style.display=""});buildNav(nav,"d");return}q=q.toLowerCase();divs.forEach(function(d){d.style.display="";var c=d.querySelector("[id^=d-cat-]");if(c)c.style.display="";var a=d.querySelector("[id$=-arrow]");if(a)a.style.transform="rotate(90deg)"});links.forEach(function(l){l.style.display=l.textContent.toLowerCase().includes(q)?"":"none"})});}
 function closeMobile(){document.getElementById('mobile-overlay').classList.add('hidden');document.getElementById('mobile-sidebar').style.transform='translateX(-100%)';}
 document.getElementById('mobile-menu-btn').onclick=()=>{document.getElementById('mobile-overlay').classList.remove('hidden');document.getElementById('mobile-sidebar').style.transform='translateX(0)';};
 </script>
