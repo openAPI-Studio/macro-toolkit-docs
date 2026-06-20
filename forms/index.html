@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FormForge — Documentation</title>
-  <meta name="description" content="Build custom forms in Confluence with drag-and-drop builder, 10 field types, theming, access control, multi-section navigation, and response management.">
+  <meta name="description" content="Build custom forms in Confluence with drag-and-drop builder, 13 field types, theming, access control, multi-section navigation, and response management.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>tailwind.config={theme:{extend:{colors:{primary:'#1E293B',secondary:'#334155',cta:'#22C55E',bg:'#0F172A',surface:'#1E293B',text:'#F8FAFC',muted:'#94A3B8',border:'#334155'},fontFamily:{sans:['IBM Plex Sans','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
@@ -14,6 +14,8 @@
     html.light .bg-surface{background-color:rgba(255,255,255,0.9)!important}
     html.light .bg-bg{background-color:#F1F5F9!important}
     html.light .text-muted{color:#475569!important}
+    html.light .text-text{color:#0F172A!important}
+    html.light .hover\:text-text:hover{color:#0F172A!important}
     html.light .border-border{border-color:#E2E8F0!important}
     html.light .text-cta{color:#16A34A!important}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -21,10 +23,6 @@
   <script>var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme:light)").matches))document.documentElement.classList.add("light")</script>
 </head>
 <body class="min-h-screen">
-  <!-- Releasing Soon Banner -->
-  <div class="bg-cta/10 border-b border-cta/20 px-4 py-2 text-center text-sm text-cta font-medium">
-    Releasing Soon — Documentation preview. Stay tuned for launch.
-  </div>
 
   <!-- Nav -->
   <nav class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-border px-4 sm:px-6 lg:px-8 py-3 flex items-center">
@@ -34,13 +32,16 @@
       <a href="../" class="hover:text-text transition-colors duration-200 cursor-pointer">Home</a>
       <a href="../macrotoolkit/" class="hover:text-text transition-colors duration-200 cursor-pointer">Macro Toolkit</a>
     </div>
+    <button id="menu-toggle" class="lg:hidden p-1.5 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer text-muted hover:text-text" aria-label="Menu"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     <div class="flex items-center gap-3 ml-auto">
+      <div class="relative hidden md:block"><input type="text" id="doc-search" placeholder="Search docs..." class="bg-bg border border-border rounded-lg px-3 py-1.5 text-sm text-text placeholder:text-muted/60 w-40 focus:outline-none focus:border-cta/50 transition-colors duration-200"><div id="search-results" class="absolute top-full right-0 mt-2 w-64 bg-surface border border-border rounded-xl shadow-xl hidden max-h-72 overflow-y-auto z-50"></div></div>
       <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer text-muted hover:text-text" aria-label="Toggle theme">
         <svg id="icon-dark" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         <svg id="icon-light" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       </button>
     </div>
   </nav>
+  <div class="bg-cta/10 border-b border-cta/20 px-4 py-2 text-center text-sm text-cta font-medium">Releasing Soon — Documentation preview</div>
 
   <main class="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-16">
     <a href="../" class="text-sm text-muted hover:text-cta transition-colors duration-200 cursor-pointer">&larr; All Tools</a>
@@ -48,13 +49,13 @@
     <!-- Hero -->
     <div class="mt-6 mb-16">
       <h1 class="text-4xl sm:text-5xl font-bold mb-4">FormForge</h1>
-      <p class="text-lg text-muted max-w-2xl mb-8">by Vectored — Build custom forms in Confluence with a drag-and-drop builder, 10 field types, theming, access control, multi-section navigation, and response management.</p>
+      <p class="text-lg text-muted max-w-2xl mb-8">by Vectored — Build custom forms in Confluence with a drag-and-drop builder, 13 field types, theming, access control, multi-section navigation, and response management.</p>
       <a href="docs/getting-started.html" class="inline-block bg-cta text-bg font-semibold px-6 py-3 rounded-lg hover:bg-cta/90 transition-colors duration-200 cursor-pointer">Read the Docs</a>
     </div>
 
     <!-- Field Types -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">10 Field Types</h2>
+      <h2 class="text-2xl font-bold mb-6">13 Field Types</h2>
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
         <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h16"/></svg><div><h3 class="font-semibold text-sm">Text</h3><p class="text-xs text-muted mt-1">Single-line text input</p></div></div>
         <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><div><h3 class="font-semibold text-sm">Email</h3><p class="text-xs text-muted mt-1">Email with validation</p></div></div>
@@ -66,6 +67,9 @@
         <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><h3 class="font-semibold text-sm">Time</h3><p class="text-xs text-muted mt-1">Native time picker</p></div></div>
         <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><div><h3 class="font-semibold text-sm">Rating</h3><p class="text-xs text-muted mt-1">Star rating (1-10, half-star option)</p></div></div>
         <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-2 5 2 8 0s5-4 8-2M3 21h18"/></svg><div><h3 class="font-semibold text-sm">Signature</h3><p class="text-xs text-muted mt-1">Canvas drawing (mouse + touch)</p></div></div>
+        <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div><h3 class="font-semibold text-sm">User</h3><p class="text-xs text-muted mt-1">Search & pick Confluence users</p></div></div>
+        <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><div><h3 class="font-semibold text-sm">Group</h3><p class="text-xs text-muted mt-1">Search & pick Confluence groups</p></div></div>
+        <div class="bg-surface border border-border rounded-xl p-4 flex items-start gap-3"><svg class="w-5 h-5 text-cta shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><div><h3 class="font-semibold text-sm">Link</h3><p class="text-xs text-muted mt-1">URL with domain & HTTPS validation</p></div></div>
       </div>
     </section>
 
@@ -152,7 +156,7 @@
             <tr><td class="px-5 py-3">Standard themes</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
             <tr><td class="px-5 py-3">Animated themes</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-muted/30 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
             <tr><td class="px-5 py-3">Multi-section forms</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-muted/30 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
-            <tr><td class="px-5 py-3">All 10 field types</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
+            <tr><td class="px-5 py-3">All 13 field types</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
             <tr><td class="px-5 py-3">Access control</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
             <tr><td class="px-5 py-3">CSV export</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
             <tr><td class="px-5 py-3">Collaboration</td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td><td class="px-5 py-3 text-center"><svg class="w-4 h-4 text-cta mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td></tr>
@@ -211,6 +215,9 @@
     upd();
   });
 })();
-</script>
+    var docs=[{name:'Getting Started',page:'docs/getting-started.html',tags:'install setup create first'},{name:'Building Forms',page:'docs/building-forms.html',tags:'builder canvas editor questions'},{name:'Field Types',page:'docs/field-types.html',tags:'text email number select date time rating signature user group link'},{name:'Smart Values',page:'docs/smart-values.html',tags:'tokens dynamic auto-fill user name email timezone'},{name:'Validation',page:'docs/validation.html',tags:'required regex min max error constraints'},{name:'Multi-Section',page:'docs/multi-section.html',tags:'sections pages steps next back pro'},{name:'Embedding',page:'docs/embedding.html',tags:'macro page embed share link direct'},{name:'Styling',page:'docs/styling.html',tags:'theme color banner font decoration'},{name:'Access Control',page:'docs/access-control.html',tags:'permission login groups anonymous limit'},{name:'Collaboration',page:'docs/collaboration.html',tags:'co-owner editor sharing'},{name:'Responses',page:'docs/responses.html',tags:'submissions export csv pdf results'},{name:'Dashboard',page:'docs/dashboard.html',tags:'search filter delete duplicate'},{name:'Free vs Pro',page:'docs/free-vs-pro.html',tags:'pricing plan limit upgrade'}];
+    function wire(iid,rid){var i=document.getElementById(iid),r=document.getElementById(rid);if(!i||!r)return;i.addEventListener('input',function(){var q=this.value.toLowerCase().trim();if(!q){r.classList.add('hidden');r.innerHTML='';return;}var m=docs.filter(function(d){return d.name.toLowerCase().includes(q)||d.tags.includes(q);});r.innerHTML=m.length?m.map(function(d){return '<a href="'+d.page+'" class="block px-4 py-2 text-sm text-muted hover:text-text hover:bg-bg transition-colors duration-200 cursor-pointer">'+d.name+'</a>';}).join(''):'<p class="px-4 py-3 text-sm text-muted">No results</p>';r.classList.remove('hidden');});i.addEventListener('keydown',function(e){if(e.key==='Escape'){r.classList.add('hidden');this.blur();}});document.addEventListener('click',function(e){if(!e.target.closest('#'+iid)&&!e.target.closest('#'+rid))r.classList.add('hidden');});}
+    wire('doc-search','search-results');
+  </script>
 </body>
 </html>

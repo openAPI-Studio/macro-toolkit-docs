@@ -13,14 +13,14 @@
     html.light .bg-surface,html.light .bg-surface\/90{background-color:rgba(255,255,255,0.9)!important}
     html.light .bg-bg{background-color:#F1F5F9!important}
     html.light .text-muted{color:#475569!important}
+    html.light .text-text{color:#0F172A!important}
+    html.light .hover\:text-text:hover{color:#0F172A!important}
     html.light .border-border{border-color:#E2E8F0!important}
     html.light .text-cta{color:#16A34A!important}
   </style>
   <script>var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme:light)").matches))document.documentElement.classList.add("light")</script>
 </head>
 <body class="min-h-screen">
-  <!-- Banner -->
-  <div class="bg-cta/10 border-b border-cta/20 px-4 py-2 text-center text-sm text-cta font-medium">Releasing Soon — Documentation preview</div>
 
   <!-- Nav -->
   <nav class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-border px-4 sm:px-6 lg:px-8 py-3 flex items-center">
@@ -31,22 +31,26 @@
       <a href="../" class="hover:text-text transition-colors duration-200 cursor-pointer">Forms</a>
       <a href="../../macrotoolkit/" class="hover:text-text transition-colors duration-200 cursor-pointer">Macro Toolkit</a>
     </div>
+    <button id="menu-toggle" class="lg:hidden p-1.5 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer text-muted hover:text-text" aria-label="Menu"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     <div class="flex items-center gap-3 ml-auto">
+      <div class="relative hidden md:block"><input type="text" id="doc-search" placeholder="Search docs..." class="bg-bg border border-border rounded-lg px-3 py-1.5 text-sm text-text placeholder:text-muted/60 w-40 focus:outline-none focus:border-cta/50 transition-colors duration-200"><div id="search-results" class="absolute top-full right-0 mt-2 w-64 bg-surface border border-border rounded-xl shadow-xl hidden max-h-72 overflow-y-auto z-50"></div></div>
       <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer text-muted hover:text-text" aria-label="Toggle theme">
         <svg id="icon-dark" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         <svg id="icon-light" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       </button>
     </div>
   </nav>
+  <div class="bg-cta/10 border-b border-cta/20 px-4 py-2 text-center text-sm text-cta font-medium">Releasing Soon — Documentation preview</div>
 
   <!-- Sidebar + Content -->
   <div class="flex">
-    <aside class="hidden lg:block fixed top-[5.5rem] left-0 w-64 h-[calc(100vh-5.5rem)] overflow-y-auto border-r border-border px-4 py-6">
+    <aside id="mobile-sidebar" class="hidden lg:block fixed top-[5.5rem] left-0 w-64 h-[calc(100vh-5.5rem)] overflow-y-auto border-r border-border px-4 py-6">
       <a href="../" class="text-xs text-muted hover:text-cta transition-colors duration-200 cursor-pointer block mb-4">&larr; Forms Overview</a>
       <nav class="space-y-1">
         <a href="getting-started.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="getting-started">Getting Started</a>
         <a href="building-forms.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="building-forms">Building Forms</a>
         <a href="field-types.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="field-types">Field Types</a>
+        <a href="smart-values.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="smart-values">Smart Values</a>
         <a href="validation.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="validation">Validation & Constraints</a>
         <a href="multi-section.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="multi-section">Multi-Section Forms</a>
         <a href="embedding.html" class="sidebar-link block px-3 py-1.5 rounded-lg text-sm text-muted hover:text-text hover:bg-surface transition-colors duration-200 cursor-pointer" data-page="embedding">Embedding Forms</a>
@@ -92,9 +96,13 @@
     function upd(){var isLight=document.documentElement.classList.contains('light');document.getElementById('icon-dark').style.display=isLight?'block':'none';document.getElementById('icon-light').style.display=isLight?'none':'block';}
     upd();
     document.getElementById('theme-toggle').addEventListener('click',function(e){e.stopPropagation();document.documentElement.classList.toggle('light');localStorage.setItem('theme',document.documentElement.classList.contains('light')?'light':'dark');upd();});
+    var mb=document.getElementById("menu-toggle"),ms=document.getElementById("mobile-sidebar");if(mb&&ms){mb.addEventListener("click",function(){ms.classList.toggle("hidden");ms.classList.toggle("fixed");ms.classList.toggle("inset-0");ms.classList.toggle("top-[7rem]");ms.classList.toggle("z-40");ms.classList.toggle("bg-bg");});}
     var page=location.pathname.split('/').pop().replace('.html','');
     document.querySelectorAll('.sidebar-link').forEach(function(l){if(l.dataset.page===page){l.classList.remove('text-muted');l.classList.add('text-cta','bg-cta/10','font-medium');}});
   })();
+    var docs=[{name:'Getting Started',page:'getting-started.html',tags:'install setup create first'},{name:'Building Forms',page:'building-forms.html',tags:'builder canvas editor questions'},{name:'Field Types',page:'field-types.html',tags:'text email number select date time rating signature user group link'},{name:'Smart Values',page:'smart-values.html',tags:'tokens dynamic auto-fill user name email timezone'},{name:'Validation',page:'validation.html',tags:'required regex min max error constraints'},{name:'Multi-Section',page:'multi-section.html',tags:'sections pages steps next back pro'},{name:'Embedding',page:'embedding.html',tags:'macro page embed share link direct'},{name:'Styling',page:'styling.html',tags:'theme color banner font decoration'},{name:'Access Control',page:'access-control.html',tags:'permission login groups anonymous limit'},{name:'Collaboration',page:'collaboration.html',tags:'co-owner editor sharing'},{name:'Responses',page:'responses.html',tags:'submissions export csv pdf results'},{name:'Dashboard',page:'dashboard.html',tags:'search filter delete duplicate'},{name:'Free vs Pro',page:'free-vs-pro.html',tags:'pricing plan limit upgrade'}];
+    function wire(iid,rid){var i=document.getElementById(iid),r=document.getElementById(rid);if(!i||!r)return;i.addEventListener('input',function(){var q=this.value.toLowerCase().trim();if(!q){r.classList.add('hidden');r.innerHTML='';return;}var m=docs.filter(function(d){return d.name.toLowerCase().includes(q)||d.tags.includes(q);});r.innerHTML=m.length?m.map(function(d){return '<a href="'+d.page+'" class="block px-4 py-2 text-sm text-muted hover:text-text hover:bg-bg transition-colors duration-200 cursor-pointer">'+d.name+'</a>';}).join(''):'<p class="px-4 py-3 text-sm text-muted">No results</p>';r.classList.remove('hidden');});i.addEventListener('keydown',function(e){if(e.key==='Escape'){r.classList.add('hidden');this.blur();}});document.addEventListener('click',function(e){if(!e.target.closest('#'+iid)&&!e.target.closest('#'+rid))r.classList.add('hidden');});}
+    wire('doc-search','search-results');
   </script>
 </body>
 </html>
