@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Studio — Offline API Client for VS Code &amp; CLI</title>
+  <meta name="description" content="API Studio documentation. REST, GraphQL, WebSocket, gRPC, mock servers, MCP tools, secret vault, and headless CLI — fully offline, no account required.">
+  <link rel="canonical" href="https://docs.vectored.dev/apistudio">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>tailwind.config={theme:{extend:{colors:{primary:'#1E293B',secondary:'#334155',cta:'#22C55E',bg:'#0F172A',surface:'#1E293B',text:'#F8FAFC',muted:'#94A3B8',border:'#334155'},fontFamily:{sans:['IBM Plex Sans','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+  <style>
+    body{background:#0F172A;color:#F8FAFC;font-family:'IBM Plex Sans',sans-serif}.font-mono{font-family:'JetBrains Mono',monospace}
+    html.light body{background:#F8FAFC;color:#0F172A}
+    html.light .bg-surface,html.light .bg-surface\/90{background-color:rgba(255,255,255,0.9)!important}
+    html.light .bg-bg{background-color:#F1F5F9!important}
+    html.light .text-muted{color:#475569!important}
+    html.light .text-text{color:#0F172A!important}
+    html.light .border-border{border-color:#E2E8F0!important}
+    html.light .text-cta{color:#16A34A!important}
+    html.light .border-cta\/30{border-color:rgba(22,163,74,0.3)!important}
+    html.light .bg-cta\/10{background-color:rgba(22,163,74,0.1)!important}
+    html.light .border-cta\/20{border-color:rgba(22,163,74,0.2)!important}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    /* Sticky sidebar TOC */
+    .toc-link{display:block;padding:4px 12px;font-size:0.75rem;color:#94A3B8;border-left:2px solid transparent;transition:all 0.15s}
+    .toc-link:hover,.toc-link.active{color:#22C55E;border-left-color:#22C55E}
+    html.light .toc-link{color:#475569}
+    html.light .toc-link:hover,html.light .toc-link.active{color:#16A34A;border-left-color:#16A34A}
+    /* Comparison table */
+    .cmp-yes{color:#22C55E;font-weight:600}
+    .cmp-no{color:#475569}
+    .cmp-partial{color:#F59E0B}
+    html.light .cmp-no{color:#94A3B8}
+  </style>
+  <script>var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme:light)").matches))document.documentElement.classList.add("light")</script>
+</head>
+<body class="min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="fixed top-4 left-4 right-4 z-50 bg-surface/90 backdrop-blur-md border border-border rounded-xl px-4 sm:px-6 lg:px-8 py-3 flex items-center">
+    <a href="../" class="shrink-0 leading-tight"><span class="font-mono font-bold text-lg text-cta block">Vectored</span><span class="text-[10px] text-muted">Tools for developers</span></a>
+    <div class="hidden md:block w-px h-5 bg-border mx-5"></div>
+    <div class="hidden md:flex items-center gap-5 text-sm text-muted">
+      <a href="../" class="hover:text-text transition-colors duration-200 cursor-pointer">Home</a>
+      <a href="./docs/" class="hover:text-text transition-colors duration-200 cursor-pointer">Docs</a>
+      <a href="./support.html" class="hover:text-text transition-colors duration-200 cursor-pointer">Support</a>
+      <a href="../macrotoolkit/" class="hover:text-text transition-colors duration-200 cursor-pointer">Macro Toolkit</a>
+    </div>
+    <div class="flex items-center gap-3 ml-auto">
+      <span class="hidden sm:inline-flex items-center gap-1.5 bg-cta/10 border border-cta/30 text-cta text-xs font-mono px-2.5 py-1 rounded-full">v1.4.58</span>
+      <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-bg transition-colors duration-200 cursor-pointer text-muted hover:text-text" aria-label="Toggle theme">
+        <svg id="icon-dark" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg id="icon-light" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Layout: sidebar + main -->
+  <div class="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex gap-10">
+
+    <!-- Sticky TOC sidebar (desktop) -->
+    <aside class="hidden xl:block w-52 shrink-0">
+      <div class="sticky top-28">
+        <p class="text-[10px] font-semibold uppercase tracking-widest text-muted mb-3 ml-3">On this page</p>
+        <nav id="toc">
+          <a href="#overview" class="toc-link">Overview</a>
+          <a href="#install" class="toc-link">Installation</a>
+          <a href="#protocols" class="toc-link">Protocols</a>
+          <a href="#collections" class="toc-link">Collections &amp; Environments</a>
+          <a href="#auth" class="toc-link">Authentication</a>
+          <a href="#testing" class="toc-link">Testing &amp; Scripting</a>
+          <a href="#mock-mcp" class="toc-link">Mock &amp; MCP Servers</a>
+          <a href="#vault" class="toc-link">Secret Vault</a>
+          <a href="#cli" class="toc-link">CLI Reference</a>
+          <a href="#code-export" class="toc-link">Code Export</a>
+          <a href="#comparison" class="toc-link">Comparison</a>
+          <a href="#cicd" class="toc-link">CI/CD</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="min-w-0 flex-1 max-w-4xl">
+
+      <!-- Breadcrumb + title -->
+      <a href="../" class="text-sm text-muted hover:text-cta transition-colors duration-200 cursor-pointer">&larr; All Tools</a>
+      <div class="flex items-center gap-3 mt-4 mb-2">
+        <svg class="w-8 h-8 text-[#007ACC]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/></svg>
+        <h1 class="text-3xl sm:text-4xl font-bold">API Studio</h1>
+      </div>
+      <p class="text-muted mb-10 text-lg">A fully offline API client — REST, GraphQL, WebSocket, gRPC, mock servers, MCP tools, secret vault, and headless CLI. No account, no cloud, no telemetry.</p>
+
+      <!-- Overview -->
+      <section id="overview" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Overview</h2>
+        <div class="grid sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="w-8 h-8 rounded-lg bg-cta/10 flex items-center justify-center mb-3">
+              <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <h3 class="font-semibold text-sm mb-1">VS Code Extension</h3>
+            <p class="text-xs text-muted">Full API client inside your editor. Activity bar panel, native tree views, keyboard shortcuts, and split-pane layout.</p>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="w-8 h-8 rounded-lg bg-cta/10 flex items-center justify-center mb-3">
+              <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-sm mb-1">CLI &amp; npm Package</h3>
+            <p class="text-xs text-muted">Headless runner for CI/CD. <code class="font-mono">openpost run</code> reads the same <code class="font-mono">.openpost/</code> files as the extension.</p>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="w-8 h-8 rounded-lg bg-cta/10 flex items-center justify-center mb-3">
+              <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-sm mb-1">Electron Desktop App</h3>
+            <p class="text-xs text-muted">Standalone app for when you're outside VS Code. Same features, same storage format, works offline.</p>
+          </div>
+        </div>
+
+        <!-- Feature grid -->
+        <div class="grid sm:grid-cols-2 gap-2">
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">REST, GraphQL, WebSocket &amp; gRPC</p><p class="text-xs text-muted mt-0.5">All four protocols with dedicated editors and response views</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">Collections &amp; Environments</p><p class="text-xs text-muted mt-0.5">Local and global scope, nested folders, drag-and-drop reordering</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">7 Auth Types</p><p class="text-xs text-muted mt-0.5">Basic, Bearer, API Key, OAuth 2.0, AWS SigV4, Digest — with inheritance</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">GUI Tests &amp; JS Scripts</p><p class="text-xs text-muted mt-0.5">11 no-code rule types + pre-request and test JS scripting sandbox</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">Mock Servers</p><p class="text-xs text-muted mt-0.5">Multi-instance, route-based, snapshot-sourced responses, offline</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">MCP Server Tools</p><p class="text-xs text-muted mt-0.5">Expose collections as AI tools for Claude Desktop, Cursor, Copilot</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">AES-256-GCM Secret Vault</p><p class="text-xs text-muted mt-0.5">Encrypted local vault, secret sets, TLS certificates — no cloud</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+            <svg class="w-4 h-4 text-cta mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div><p class="text-sm font-medium">Code Export — 14 Languages</p><p class="text-xs text-muted mt-0.5">cURL, PowerShell, fetch, axios, Python, Go, Java, C#, Rust, Swift…</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Installation -->
+      <section id="install" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Installation</h2>
+        <div class="space-y-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-[#007ACC]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/></svg>
+              <h3 class="font-semibold text-sm">VS Code Extension</h3>
+            </div>
+            <p class="text-sm text-muted mb-3">Search <strong class="text-text">"API Studio"</strong> in the Extensions marketplace, or install via the command palette:</p>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>ext install open-post.open-post</code></pre>
+            <p class="text-xs text-muted mt-3">Requires VS Code <strong class="text-text">1.85.0</strong> or later. Open with <kbd class="bg-bg border border-border rounded px-1.5 py-0.5 text-[10px] font-mono">Ctrl+Alt+P</kbd> / <kbd class="bg-bg border border-border rounded px-1.5 py-0.5 text-[10px] font-mono">Cmd+Alt+P</kbd>.</p>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <h3 class="font-semibold text-sm">CLI (npm)</h3>
+            </div>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code># Global install (recommended)
+npm install -g openpost
+openpost --help
+
+# Or run without installing
+npx openpost --help</code></pre>
+          </div>
+        </div>
+
+        <!-- Storage note -->
+        <div class="mt-4 bg-surface border border-border rounded-xl p-5">
+          <h3 class="font-semibold text-sm mb-2">Storage Layout</h3>
+          <p class="text-sm text-muted mb-3">All data lives on your machine as plain JSON — nothing is sent to the cloud.</p>
+          <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>.openpost/                 ← workspace-local (per project)
+  ├── collections.json
+  ├── environments.json
+  ├── history.json
+  ├── snapshots.json
+  ├── cookies.json
+  ├── session.json
+  └── mock-servers.json
+
+~/.openpost/global/        ← shared across all workspaces
+  ├── collections.json
+  ├── environments.json
+  ├── config.json
+  └── vault.enc            ← AES-256-GCM encrypted secrets</code></pre>
+        </div>
+      </section>
+
+      <!-- Protocols -->
+      <section id="protocols" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Protocol Support</h2>
+        <div class="space-y-4">
+
+          <!-- REST -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-cta/10 border border-cta/30 text-cta text-[10px] font-mono px-2 py-0.5 rounded-full">REST / HTTP</span>
+            </div>
+            <p class="text-sm text-muted mb-3">Arbitrary HTTP methods with URL template variables, all body types, custom headers and params. Protocol Selector button switches between HTTP, GraphQL, WebSocket, and gRPC.</p>
+            <ul class="text-xs text-muted space-y-1">
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Body types: JSON, raw, XML, form-data, urlencoded, binary, GraphQL</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>CodeMirror 6 editor with syntax highlighting, <kbd class="bg-bg border border-border rounded px-1 py-0 text-[10px] font-mono">Ctrl+F</kbd> search, zoom controls</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Inline comment stripping, <code class="font-mono bg-bg rounded px-1">{{variable}}</code> color tokens</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>cURL paste import with full flag support</li>
+            </ul>
+          </div>
+
+          <!-- GraphQL -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-cta/10 border border-cta/30 text-cta text-[10px] font-mono px-2 py-0.5 rounded-full">GraphQL</span>
+            </div>
+            <p class="text-sm text-muted mb-3">Full Postman/Insomnia parity. Schema-aware editing, visual query builder, docs panel, and live subscriptions.</p>
+            <ul class="text-xs text-muted space-y-1">
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Schema introspection, SDL file import, schema URL override, persistent cache</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Visual query builder — checkbox field tree with auto-generated variable declarations</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Docs panel with full-text search, clickable type refs, breadcrumb navigation</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Subscriptions via <code class="font-mono bg-bg rounded px-1">graphql-transport-ws</code> — live event panel with timestamps</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Multi-operation picker, inline lint squiggles, prettify button</li>
+            </ul>
+          </div>
+
+          <!-- WebSocket -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-cta/10 border border-cta/30 text-cta text-[10px] font-mono px-2 py-0.5 rounded-full">WebSocket</span>
+            </div>
+            <p class="text-sm text-muted mb-3">Activated when the URL starts with <code class="font-mono text-xs bg-bg rounded px-1">ws://</code> or <code class="font-mono text-xs bg-bg rounded px-1">wss://</code>.</p>
+            <ul class="text-xs text-muted space-y-1">
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Message composer with Text / JSON type selector</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Read-only message log with direction filter (All / Sent / Received)</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Auth and custom headers injected into the WS handshake</li>
+            </ul>
+          </div>
+
+          <!-- gRPC -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-cta/10 border border-cta/30 text-cta text-[10px] font-mono px-2 py-0.5 rounded-full">gRPC</span>
+            </div>
+            <p class="text-sm text-muted mb-3">Activated with <code class="font-mono text-xs bg-bg rounded px-1">grpc://</code> / <code class="font-mono text-xs bg-bg rounded px-1">grpcs://</code> URLs.</p>
+            <ul class="text-xs text-muted space-y-1">
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Proto file picker, service and method dropdowns</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Unary and server-streaming call types</li>
+              <li class="flex items-center gap-2"><svg class="w-3 h-3 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Metadata headers tab, streaming message log with timestamps, <code class="font-mono bg-bg rounded px-1">grpcurl</code> export</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Collections & Environments -->
+      <section id="collections" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Collections &amp; Environments</h2>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Collections</h3>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Local (workspace) and global (user) scope</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Unlimited nested folders with drag-and-drop reorder and reparent</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Deep search by request name or URL across nested folders</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Postman v2.0 / v2.1 import, OpenAPI &amp; Swagger import</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Collection-level variables, auth, and scripts cascade to all requests</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Collection runs — sequential or parallel (configurable concurrency)</li>
+            </ul>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Environments &amp; Variables</h3>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Local and global environments with active selection</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><code class="font-mono bg-bg rounded px-1">{{variable}}</code> interpolation in URL, headers, body, and auth</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Response variable extraction (JSON path, header, regex, full body)</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Priority: collection vars &lt; global env &lt; vault secrets &lt; local env</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Enabled/disabled rows, visual distinction for active global env</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-surface border border-border rounded-xl p-5">
+          <h3 class="font-semibold text-sm mb-2">Auth &amp; Script Inheritance</h3>
+          <p class="text-sm text-muted mb-3">Auth and scripts cascade down the collection hierarchy — set once at the collection level, inherit everywhere.</p>
+          <div class="flex items-center gap-2 text-xs font-mono text-muted">
+            <span class="bg-bg border border-border rounded px-2 py-1">Collection</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="bg-bg border border-border rounded px-2 py-1">Folder</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="bg-bg border border-border rounded px-2 py-1">Request</span>
+            <span class="ml-2 text-muted">(nearest non-inherit wins for auth; scripts are concatenated)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Authentication -->
+      <section id="auth" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Authentication</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 pr-6 font-semibold text-xs uppercase tracking-wide text-muted">Auth Type</th>
+                <th class="text-left py-3 font-semibold text-xs uppercase tracking-wide text-muted">Notes</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">No Auth</td><td class="py-3 text-xs text-muted">Plain unauthenticated requests</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">Basic Auth</td><td class="py-3 text-xs text-muted">Username + password, Base64 encoded</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">Bearer Token</td><td class="py-3 text-xs text-muted">Authorization: Bearer &lt;token&gt;</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">API Key</td><td class="py-3 text-xs text-muted">Inject into header or query parameter</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">OAuth 2.0</td><td class="py-3 text-xs text-muted">Stored access token field, ready for token injection</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">AWS SigV4</td><td class="py-3 text-xs text-muted">HMAC-SHA256 signing per AWS Signature Version 4 spec</td></tr>
+              <tr><td class="py-3 pr-6 font-mono text-xs text-cta">Digest Auth</td><td class="py-3 text-xs text-muted">Performs challenge-response retry on 401</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Testing & Scripting -->
+      <section id="testing" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Testing &amp; Scripting</h2>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-3">GUI Test Rules (no-code)</h3>
+            <p class="text-xs text-muted mb-3">11 rule types in the Tests tab — results saved with each history entry.</p>
+            <div class="grid grid-cols-2 gap-1">
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">status</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">time</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">size</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">header</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">body</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">body contains</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">body is JSON</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">body schema</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">JSON path</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">content type</span>
+              <span class="bg-bg rounded px-2 py-1 text-[10px] font-mono text-muted">content length</span>
+            </div>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-3">JavaScript Scripts</h3>
+            <p class="text-xs text-muted mb-3">Sandboxed VM context with a 5-second timeout. No filesystem or network access.</p>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Pre-request script runs before HTTP execution</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Test script runs after response is available</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Sandbox exposes <code class="font-mono bg-bg rounded px-1">request</code>, <code class="font-mono bg-bg rounded px-1">response</code>, <code class="font-mono bg-bg rounded px-1">environment</code>, <code class="font-mono bg-bg rounded px-1">console</code></li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Scripts inherit from collection → folder → request</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Script example -->
+        <div class="bg-surface border border-border rounded-xl p-5">
+          <h3 class="font-semibold text-sm mb-3">Script Examples</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-wider text-muted mb-1.5">Pre-request — add a dynamic header</p>
+              <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>request.headers.push({
+  key: 'X-Timestamp',
+  value: new Date().toISOString(),
+  enabled: true
+});</code></pre>
+            </div>
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-wider text-muted mb-1.5">Test script — assert JSON response</p>
+              <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>const data = response.json();
+console.assert(Array.isArray(data.items), 'items must be an array');
+console.assert(response.status === 200, 'expected 200, got ' + response.status);</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Execution order -->
+        <div class="mt-4 bg-surface border border-border rounded-xl p-5">
+          <h3 class="font-semibold text-sm mb-2">Execution Order</h3>
+          <ol class="text-xs text-muted space-y-1 list-none">
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">1</span>Auth headers injected</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">2</span>Pre-request script runs</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">3</span>Cookies attached</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">4</span>HTTP request executes</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">5</span>Response cookies parsed and persisted</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">6</span>GUI variable extraction rules run</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">7</span>GUI test rules evaluated</li>
+            <li class="flex items-center gap-2"><span class="bg-bg border border-border rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-mono shrink-0">8</span>Test script runs</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Mock & MCP Servers -->
+      <section id="mock-mcp" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Mock &amp; MCP Servers</h2>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Mock Servers</h3>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Multiple server instances with auto-start</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Route-based matching with custom bodies or snapshot responses</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>File-served responses, per-server request logs</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><code class="font-mono bg-bg rounded px-1">{{variable}}</code> interpolation in response bodies and headers</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Optional Swagger/OpenAPI exposure per server</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Fully offline — no cloud infrastructure</li>
+            </ul>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">MCP Server Tools <span class="text-[10px] font-mono text-cta ml-1 bg-cta/10 border border-cta/30 rounded-full px-2 py-0.5">AI</span></h3>
+            <p class="text-xs text-muted mb-2">Unique to API Studio — expose your API collections as MCP tools for AI coding assistants.</p>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Collection-sourced MCP server — one per collection</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Per-request MCP description &amp; JSON Schema (auto-generate)</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Works with Claude Desktop, Cursor, VS Code Copilot</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Management MCP server — 32 workspace tools on port 3199</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Mock routes can also be exposed as MCP tools</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Headless via CLI: <code class="font-mono bg-bg rounded px-1">openpost serve</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-surface border border-border rounded-xl p-5">
+          <h3 class="font-semibold text-sm mb-2">Connecting an AI Client</h3>
+          <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code># Start the management MCP server
+openpost serve
+
+# Output:
+#   Listening on http://127.0.0.1:3199/mcp
+#   32 tools available
+
+# Claude Desktop config (~/.config/claude/claude_desktop_config.json)
+{
+  "mcpServers": {
+    "api-studio": { "url": "http://127.0.0.1:3199/mcp" }
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- Secret Vault -->
+      <section id="vault" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Secret Vault</h2>
+        <p class="text-sm text-muted mb-4">A built-in AES-256-GCM encrypted vault for API keys, passwords, and TLS certificates. Stored in <code class="font-mono text-xs bg-bg rounded px-1">~/.openpost/global/vault.enc</code> — never leaves your machine.</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Vault Features</h3>
+            <ul class="text-xs text-muted space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>AES-256-GCM encryption with PBKDF2 key derivation</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Master password create, unlock, lock, and change flows</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Secret sets — map vault keys to <code class="font-mono bg-bg rounded px-1">{{variable}}</code> names</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>TLS certificates: PEM, PFX/DER, CA bundles with optional passphrase</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Vault secrets scrubbed from all persisted history entries</li>
+              <li class="flex items-start gap-2"><svg class="w-3 h-3 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Interpolation priority: vault overrides global env</li>
+            </ul>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">CLI Vault Commands</h3>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code># Create vault
+openpost vault create
+
+# Unlock
+openpost vault unlock
+
+# Add a secret
+openpost vault add-secret api_key sk-live-abc
+
+# List (masked)
+openpost vault list-secrets
+# api_key  ••••••••
+# db_pass  ••••••••
+
+# View actual values
+openpost vault list-secrets --json</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLI Reference -->
+      <section id="cli" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">CLI Reference</h2>
+        <p class="text-sm text-muted mb-4">The <code class="font-mono text-xs bg-bg rounded px-1">openpost</code> CLI reads the same <code class="font-mono text-xs bg-bg rounded px-1">.openpost/</code> files as the VS Code extension — no separate setup required.</p>
+
+        <div class="space-y-4">
+          <!-- Run collection -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Run a Collection</h3>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>openpost run "My API" --env production
+openpost run "My API" --env staging --mode parallel --concurrency 10
+openpost run "My API" --filter "GET*" --verbose
+openpost run "My API" --output-file results.json</code></pre>
+            <div class="mt-3 p-3 bg-bg rounded-lg">
+              <p class="text-[10px] font-semibold uppercase tracking-wider text-muted mb-2">Sample output</p>
+              <pre class="text-xs font-mono text-muted whitespace-pre overflow-x-auto"><code>⚡ Running My API (12 requests, sequential)
+  Environment: production
+
+  ✓ GET  /users         200  45ms
+    ✓ status equals 200
+  ✓ POST /users         201 120ms
+  ✗ GET  /users/999     404  32ms
+    ✗ status equals 200 (got: 404)
+
+  ──────────────────────
+  11 passed  1 failed  1.2s total</code></pre>
+            </div>
+          </div>
+
+          <!-- Global flags -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-3">Global Options</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs border-collapse">
+                <thead><tr class="border-b border-border"><th class="text-left py-2 pr-4 font-semibold text-muted">Flag</th><th class="text-left py-2 font-semibold text-muted">Description</th></tr></thead>
+                <tbody class="divide-y divide-border">
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--workspace &lt;path&gt;</td><td class="py-2 text-muted">Project directory (where <code class="font-mono">.openpost/</code> lives)</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--env &lt;name&gt;</td><td class="py-2 text-muted">Active environment for this command</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--json</td><td class="py-2 text-muted">Force JSON output</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--verbose</td><td class="py-2 text-muted">Show full request/response details</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--dry-run</td><td class="py-2 text-muted">Validate without sending requests</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--filter &lt;pattern&gt;</td><td class="py-2 text-muted">Filter requests by name (glob: <code class="font-mono">GET*</code>, <code class="font-mono">*users*</code>)</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--retry &lt;n&gt;</td><td class="py-2 text-muted">Retry failed requests n times</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--output-file &lt;path&gt;</td><td class="py-2 text-muted">Save results to a JSON file</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--ssl-off</td><td class="py-2 text-muted">Disable SSL certificate verification</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-cta">--proxy &lt;name&gt;</td><td class="py-2 text-muted">Use a named proxy profile</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- More commands -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Other Commands</h3>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code># List resources
+openpost list collections
+openpost list requests "My API"
+openpost list environments
+
+# Import / Export
+openpost import curl "curl -X GET https://api.example.com -H 'Auth: Bearer token'"
+openpost import openapi ./swagger.yaml
+openpost export openapi "My API"
+openpost export curl "My API" "Get Users" --env production
+
+# Environments
+openpost env set production
+openpost env add staging base_url https://staging.api.com
+
+# Proxy
+openpost proxy add "Corp" --host proxy.corp.com --port 8080
+openpost proxy set-default "Corp"
+
+# License
+openpost license activate &lt;key&gt;
+openpost license status</code></pre>
+          </div>
+
+          <!-- Exit codes -->
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Exit Codes</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs border-collapse">
+                <tbody class="divide-y divide-border">
+                  <tr><td class="py-2 pr-4 font-mono text-cta">0</td><td class="py-2 text-muted">Success — all requests passed, all tests passed</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-yellow-400">1</td><td class="py-2 text-muted">Failure — one or more requests or tests failed</td></tr>
+                  <tr><td class="py-2 pr-4 font-mono text-red-400">2</td><td class="py-2 text-muted">Error — bad arguments, resource not found, config error</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Code Export -->
+      <section id="code-export" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">Code Export &amp; AI Prompts</h2>
+        <p class="text-sm text-muted mb-4">Generate code snippets in 14 languages from any request. All environment variables are interpolated in the generated output.</p>
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-4">
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">cURL (Unix)</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">cURL (Win)</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">PowerShell</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">JS fetch</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">JS axios</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Python requests</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Python http.client</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Go</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Java</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">C#</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Ruby</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">PHP</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Rust</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">Swift</span>
+          <span class="bg-surface border border-border rounded-lg px-3 py-2 text-xs font-mono text-muted text-center">grpcurl</span>
+        </div>
+        <p class="text-sm text-muted">AI prompt generation supports 5 dialects: <code class="font-mono text-xs bg-bg rounded px-1">describe</code>, <code class="font-mono text-xs bg-bg rounded px-1">integrate</code>, <code class="font-mono text-xs bg-bg rounded px-1">debug</code>, <code class="font-mono text-xs bg-bg rounded px-1">test</code>, <code class="font-mono text-xs bg-bg rounded px-1">document</code>.</p>
+      </section>
+
+      <!-- Comparison table -->
+      <section id="comparison" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-2">Comparison</h2>
+        <p class="text-sm text-muted mb-5">How API Studio stacks up against other popular API clients. Based on v1.4.58.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 pr-4 font-semibold text-muted min-w-[180px]">Feature</th>
+                <th class="text-center py-3 px-3 font-semibold text-cta min-w-[90px]">API Studio</th>
+                <th class="text-center py-3 px-3 font-semibold text-muted min-w-[80px]">Postman</th>
+                <th class="text-center py-3 px-3 font-semibold text-muted min-w-[80px]">Insomnia</th>
+                <th class="text-center py-3 px-3 font-semibold text-muted min-w-[100px]">Thunder Client</th>
+                <th class="text-center py-3 px-3 font-semibold text-muted min-w-[70px]">Bruno</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr><td class="py-2.5 pr-4 text-muted">Fully offline</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-partial">⚠</td><td class="py-2.5 px-3 text-center cmp-partial">⚠</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">No account required</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Plain JSON storage (git-friendly)</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-partial">⚠</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">VS Code extension</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">WebSocket client</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">gRPC client</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">GraphQL subscriptions</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Built-in encrypted secret vault</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Built-in mock servers</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">MCP / AI tools integration</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">GUI no-code test rules</td><td class="py-2.5 px-3 text-center cmp-yes">✓ 11</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Headless CLI runner</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-partial">⚠</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Response contract / snapshot tracking</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Global cross-workspace collections</td><td class="py-2.5 px-3 text-center cmp-yes">✓</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td><td class="py-2.5 px-3 text-center cmp-no">✗</td></tr>
+              <tr><td class="py-2.5 pr-4 text-muted">Pricing</td><td class="py-2.5 px-3 text-center text-cta font-medium">One-time</td><td class="py-2.5 px-3 text-center text-muted">Subscription</td><td class="py-2.5 px-3 text-center text-muted">Subscription</td><td class="py-2.5 px-3 text-center text-muted">Free</td><td class="py-2.5 px-3 text-center text-muted">Free (OSS)</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[10px] text-muted mt-2">⚠ = partial, limited, or requires a paid plan</p>
+        </div>
+      </section>
+
+      <!-- CI/CD -->
+      <section id="cicd" class="mb-14 scroll-mt-28">
+        <h2 class="text-xl font-semibold mb-5">CI/CD Integration</h2>
+        <p class="text-sm text-muted mb-4">Use <code class="font-mono text-xs bg-bg rounded px-1">openpost run</code> in any CI/CD pipeline. Exit code <code class="font-mono text-xs bg-bg rounded px-1">1</code> when tests fail, <code class="font-mono text-xs bg-bg rounded px-1">0</code> on success.</p>
+        <div class="space-y-4">
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">GitHub Actions</h3>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>- name: API Tests
+  run: |
+    npm install -g openpost
+    openpost run "My API" --env staging --quiet
+    
+# Save results as artifact
+- name: API Tests with report
+  run: |
+    openpost run "My API" --env staging --output-file results.json --json
+- uses: actions/upload-artifact@v4
+  with:
+    name: api-test-results
+    path: results.json</code></pre>
+          </div>
+          <div class="bg-surface border border-border rounded-xl p-5">
+            <h3 class="font-semibold text-sm mb-2">Programmatic Usage (Node.js)</h3>
+            <pre class="bg-bg rounded-lg p-3 text-xs font-mono text-muted overflow-x-auto"><code>import { OpenPost } from 'openpost';
+
+const op = new OpenPost({ workspace: '/path/to/project' });
+
+// Run a full collection
+const entry = await op.runCollection('My API', {
+  env: 'production',
+  mode: 'sequential',
+  onProgress: (r) => console.log(`${r.passed ? '✓' : '✗'} ${r.method} ${r.url}`),
+});
+console.log(`${entry.passed} passed, ${entry.failed} failed`);
+
+// Run a single request
+const { response, testResults } = await op.runRequest('My API', 'Get Users', {
+  env: 'prod'
+});
+
+await op.dispose();</code></pre>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="border-t border-border px-4 sm:px-6 lg:px-8 py-10">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <a href="../" class="leading-tight"><span class="font-mono font-bold text-lg text-cta block">Vectored</span><span class="text-[10px] text-muted">Tools for developers</span></a>
+        <div class="flex flex-wrap justify-center gap-6 text-sm text-muted">
+          <a href="../" class="hover:text-text transition-colors duration-200 cursor-pointer">Home</a>
+          <a href="../macrotoolkit/" class="hover:text-text transition-colors duration-200 cursor-pointer">Macro Toolkit</a>
+          <a href="../macrotoolkit/support.html" class="hover:text-text transition-colors duration-200 cursor-pointer">Support</a>
+          <a href="../macrotoolkit/privacy.html" class="hover:text-text transition-colors duration-200 cursor-pointer">Privacy</a>
+          <a href="https://github.com/openAPI-Studio" target="_blank" rel="noopener" class="hover:text-text transition-colors duration-200 cursor-pointer">GitHub</a>
+        </div>
+      </div>
+      <p class="text-center text-xs text-muted mt-6">&copy; 2026 Vectored. Built for developers.</p>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  var t=localStorage.getItem('theme');
+  if(t==='light')document.documentElement.classList.add('light');
+  else if(t==='dark')document.documentElement.classList.remove('light');
+  else if(window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('light');
+  function upd(){
+    var isLight=document.documentElement.classList.contains('light');
+    document.getElementById('icon-dark').style.display=isLight?'block':'none';
+    document.getElementById('icon-light').style.display=isLight?'none':'block';
+  }
+  upd();
+  document.getElementById('theme-toggle').addEventListener('click',function(e){e.stopPropagation();
+    document.documentElement.classList.toggle('light');
+    localStorage.setItem('theme',document.documentElement.classList.contains('light')?'light':'dark');
+    upd();
+  });
+
+  // Active TOC link on scroll
+  var tocLinks=document.querySelectorAll('.toc-link');
+  var sections=Array.from(tocLinks).map(function(l){return document.querySelector(l.getAttribute('href'))}).filter(Boolean);
+  function onScroll(){
+    var top=window.scrollY+120;
+    var active=sections[0];
+    sections.forEach(function(s){if(s.offsetTop<=top)active=s;});
+    tocLinks.forEach(function(l){
+      l.classList.toggle('active',l.getAttribute('href')==='#'+active.id);
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
